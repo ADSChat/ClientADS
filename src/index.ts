@@ -144,7 +144,7 @@ app.use("/", async (req: Request, res: Response)=>{
 	}
 });
 
-const PORT = process.env.PORT || Number(process.argv[2]) || 8080;
+const PORT = process.env.PORT || Number(process.argv[2]) || 80;
 app.listen(PORT, ()=>{
 	console.log(`Server running on port ${PORT}`);
 });
