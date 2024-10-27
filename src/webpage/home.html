@@ -1,64 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Jank Client</title>
-		<meta content="Jank Client" property="og:title">
-		<meta content="A spacebar client that has DMs, replying and more" property="og:description">
-		<meta content="/logo.webp" property="og:image">
-		<meta content="#4b458c" data-react-helmet="true" name="theme-color">
-		<link href="/style.css" rel="stylesheet">
-		<link href="/themes.css" rel="stylesheet" id="lightcss">
-		<style>body.no-theme{background:#16191b;}@media(prefers-color-scheme:light){body.no-theme{background:#9397bd;}}</style>
-	</head>
-
-	<body class="no-theme" style="overflow-y: scroll;">
-		<div id="titleDiv">
-			<img src="/logo.svg" width="40">
-			<h1 id="pageTitle">Jank Client</h1>
-			<a href="https://sb-jankclient.vanillaminigames.net/invite/USgYJo?instance=https%3A%2F%2Fspacebar.chat"
-				class="TitleButtons">
-				Spacebar Guild
-			</a>
-			<a href="https://github.com/MathMan05/JankClient" class="TitleButtons">
-				Github
-			</a>
-			<a href="/channels/@me" class="TitleButtons">
-				Open Client
-			</a>
-		</div>
-		<div id="homePage">
-
-			<h1 class="pagehead">Welcome to Jank Client</h1>
-			<div class="pagebox">
-				<p>Jank Client is a Spacebar-compatible client seeking to be as good as it can be with many features including:</p>
-				<ul>
-					<li>Direct Messaging</li>
-					<li>Reactions support</li>
-					<li>Invites</li>
-					<li>Account switching</li>
-					<li>User settings</li>
-					<li>Developer portal</li>
-					<li>Bot invites</li>
-				</ul>
-			</div>
-			<div class="pagebox">
-				<h2>Spacebar-Compatible Instances:</h2>
-				<div id="instancebox">
-				</div>
-			</div>
-			<div class="pagebox">
-				<h2>Contribute to Jank Client</h2>
-				<p>We always appreciate some help, whether that be in the form of bug reports, or code, or even just pointing out
-					some typos.</p><br>
-				<a href="https://github.com/MathMan05/JankClient" class="TitleButtons">
-					Github
-				</a>
-			</div>
-		</div>
-	</body>
-	<script src="/home.js" type="module"></script>
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canary Chat</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Times New Roman', Times, serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(45deg, #C4E1F6, #FEEE91, #FFBD73, #FF9D3D);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .header {
+            width: 90%;
+            background-color: #EBA110;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Center vertically */
+            padding: 10px 20px;
+            position: absolute;
+            top: 20px; /* Add some space from the top */
+            border-radius: 20px;
+        }
+        .header .title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left; /* Align text to the left */
+        }
+        .header .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .header .nav-buttons button {
+            background-color: #ffb54d;
+            border: 2px solid black;
+            border-radius: 12px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .main-content {
+            margin-top: 120px; /* Adjusted to account for the header height and space from the top */
+        }
+        .main-content h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .main-content img {
+            margin-bottom: 20px;
+        }
+        .main-content .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .main-content .action-buttons button {
+            background-color: #EBA110;
+            border: 2px solid black;
+            border-radius: 12px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .login-redirect {
+            background-color: #ffb54d;
+            border: 2px solid black;
+            border-radius: 12px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">Canary Chat</div>
+        <div class="nav-buttons">
+            <button onclick="window.location.href='login.html'">Login</button>
+            <button onclick="window.location.href='register.html'">Register</button>
+        </div>
+    </div>
+    <div class="main-content">
+        <h1>Canary Chat</h1>
+        <img src="http://db.adsnetworks.xyz/logo.png" alt="Canary Chat Logo" style="height: 200px;">
+        <div class="action-buttons">
+            <button onclick="window.location.href='login.html'">Login</button>
+            <button onclick="window.location.href='register.html'">Register</button>
+            <button onclick="window.location.href='https://downloads.quizzity.tech'">Downloads</button>
+        </div>
+        <button class="login-redirect" onclick="window.location.href='/@me'">Already Logged in? Press here!</button>
+    </div>
+</body>
 </html>
