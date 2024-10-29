@@ -1,64 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Canary Chat</title>
-		<meta content="Canary Chat" property="og:title">
-		<meta content="A spacebar client that has DMs, replying and more" property="og:description">
-		<meta content="/logo.webp" property="og:image">
-		<meta content="#4b458c" data-react-helmet="true" name="theme-color">
-		<link href="/style.css" rel="stylesheet">
-		<link href="/themes.css" rel="stylesheet" id="lightcss">
-		<style>body.no-theme{background:#16191b;}@media(prefers-color-scheme:light){body.no-theme{background:#9397bd;}}</style>
-	</head>
-	<body class="no-theme">
-		<div id="logindiv">
-			<h1>Create an account</h1>
-			<form id="register" submit="registertry(e)">
-				<div>
-					<label for="instance"><b>Instance:</b></label>
-					<p id="verify"></p>
-					<input type="search" list="instances" placeholder="Instance URL" id="instancein" name="instance" value="" required>
-				</div>
-				<div>
-					<label for="uname"><b>Email:</b></label>
-					<input type="text" placeholder="Enter Email" name="uname" id="uname" required>
-				</div>
-
-				<div>
-					<label for="uname"><b>Username:</b></label>
-					<input type="text" placeholder="Enter Username" name="username" id="username" required>
-				</div>
-				<div>
-					<label for="psw"><b>Password:</b></label>
-					<input type="password" placeholder="Enter Password" name="psw" id="psw" required>
-				</div>
-
-				<div>
-					<label for="psw2"><b>Enter password again:</b></label>
-					<input type="password" placeholder="Enter Password Again" name="psw2" id="psw2" required>
-				</div>
-
-				<div>
-					<label for="date"><b>Date of birth:</b></label>
-					<input type="date" id="date" name="date">
-				</div>
-
-				<div>
-					<b id="TOSbox">I agree to the <a href="" id="TOSa">Terms of Service</a>:</b>
-					<input type="checkbox" id="TOS" name="TOS">
-				</div>
-
-				<p class="wrongred" id="wrong"></p>
-				<div id="h-captcha">
-
-				</div>
-				<button type="submit" class="dontgrow">Create account</button>
-			</form>
-			<a href="/login.html" id="switch">Already have an account?</a>
-		</div>
-		<datalist id="instances"></datalist>
-		<script src="/register.js" type="module"></script>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canary Chat</title>
+    <meta content="Canary Chat" property="og:title">
+    <meta content="A spacebar client that has DMs, replying and more" property="og:description">
+    <meta content="/logo.webp" property="og:image">
+    <meta content="#4b458c" data-react-helmet="true" name="theme-color">
+    <link href="/style.css" rel="stylesheet">
+    <link href="/themes.css" rel="stylesheet" id="lightcss">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: black;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container img {
+            width: 200px;
+            margin-bottom: 20px;
+        }
+        .container h1 {
+            font-size: 36px;
+            margin: 0;
+        }
+        .form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(50, 50, 50, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .form input {
+            width: 300px;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .form button {
+            background-color: #FFDF00;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: black;
+            margin-top: 20px;
+        }
+        .form a {
+            color: #FFDF00;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .wrongred {
+            color: red;
+        }
+    </style>
+</head>
+<body class="no-theme">
+    <div class="container">
+        <img src="logo.png" alt="Canary Chat Logo">
+        <h1>Create an account</h1>
+        <form id="register" class="form" onsubmit="registertry(event)">
+            <div>
+                <label for="instance"><b>Instance:</b></label>
+                <p id="verify"></p>
+                <input type="search" list="instances" placeholder="Instance URL" id="instancein" name="instance" required>
+                <datalist id="instances"></datalist>
+            </div>
+            <div>
+                <label for="uname"><b>Email:</b></label>
+                <input type="text" placeholder="Enter Email" name="uname" id="uname" required>
+            </div>
+            <div>
+                <label for="username"><b>Username:</b></label>
+                <input type="text" placeholder="Enter Username" name="username" id="username" required>
+            </div>
+            <div>
+                <label for="psw"><b>Password:</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+            </div>
+            <div>
+                <label for="psw2"><b>Enter password again:</b></label>
+                <input type="password" placeholder="Enter Password Again" name="psw2" id="psw2" required>
+            </div>
+            <div>
+                <label for="date"><b>Date of birth:</b></label>
+                <input type="date" id="date" name="date">
+            </div>
+            <div>
+                <b id="TOSbox">I agree to the <a href="" id="TOSa">Terms of Service</a>:</b>
+                <input type="checkbox" id="TOS" name="TOS">
+            </div>
+            <p class="wrongred" id="wrong"></p>
+            <div id="h-captcha"></div>
+            <button type="submit">Create account</button>
+            <a href="/login.html">Already have an account? Login</a>
+        </form>
+    </div>
+    <script src="/register.js" type="module"></script>
+</body>
 </html>
