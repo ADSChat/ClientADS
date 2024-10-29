@@ -1,189 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canary Chat</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center; /* Centering content vertically */
-            min-height: 100vh;
-            background-color: black;
-            overflow-x: hidden;
-            font-family: Arial, sans-serif;
-            color: white;
-        }
-        .container {
-            text-align: center;
-            z-index: 10; /* Ensures content is on top */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center; /* Centering content horizontally */
-            height: 100vh; /* Full height for centering */
-        }
-        .container img {
-            width: 200px;
-            margin-bottom: 20px;
-        }
-        .container h1 {
-            font-size: 48px;
-            margin: 0;
-        }
-        .buttons {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        .button {
-            background-color: #FFDF00;
-            border: none;
-            color: black;
-            padding: 15px 30px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px 5px;
-            cursor: pointer;
-            border-radius: 10px;
-        }
-        .login-button {
-            background-color: #FFF;
-            border: none;
-            color: black;
-            padding: 15px 30px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px 5px;
-            cursor: pointer;
-            border-radius: 10px;
-        }
-        .neon-lines {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, rgba(255, 0, 0, 0) 0%, rgba(255, 0, 0, 1) 25%, rgba(0, 255, 0, 1) 50%, rgba(0, 0, 255, 1) 75%, rgba(255, 0, 0, 0) 100%);
-            animation: neonPulse 3s infinite;
-            opacity: 0.2;
-            filter: blur(8px);
-        }
-        @keyframes neonPulse {
-            0% {
-                transform: translateY(-100%);
-            }
-            50% {
-                transform: translateY(0%);
-            }
-            100% {
-                transform: translateY(100%);
-            }
-        }
-        .changelog {
-            width: 60%;
-            margin-top: 20px; /* Reduced from 100vh to 20px */
-            padding: 50px;
-            background-color: rgba(50, 50, 50, 0.9);
-            border-radius: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            color: white;
-            text-align: center;
-            margin-bottom: 50px; /* Keeps the space at the bottom */
-        }
-        .changelog h2 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-        .changelog ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .changelog li {
-            margin: 10px 0;
-            background-color: #333;
-            padding: 15px;
-            border-radius: 10px;
-        }
-        .scroll-down {
-            text-align: center;
-            width: 100%;
-        }
-        .scroll-down p {
-            margin: 5px;
-        }
-        .scroll-down .arrow {
-            font-size: 32px; /* Bigger size for the arrow */
-            animation: bounce 2s infinite;
-        }
-        .icons {
-            margin-top: 20px;
-        }
-        .icons img {
-            width: 50px;
-            height: 50px;
-            margin: 0 15px;
-            cursor: pointer;
-        }
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="neon-lines"></div>
-    <div class="container">
-        <img src="logo.png" alt="Canary Chat Logo">
-        <h1>Canary Chat</h1>
-        <div class="buttons">
-            <a href="register.html" class="button">Get Started</a>
-            <a href="login.html" class="button login-button">Login</a>
-        </div>
-    </div>
-    <div class="scroll-down">
-        <p>Scroll down</p>
-        <div class="arrow">↓</div>
-    </div>
-    <div class="changelog" id="changelog">
-        <h2>Changelog</h2>
-        <ul id="commit-list">
-            <!-- Commit messages will be inserted here by JavaScript -->
-        </ul>
-        <div class="icons">
-            <a href="https://github.com/ADSChat/canarychat.me/"><img src="githublogo.png" alt="GitHub"></a>
-            <a href="https://discord.com/channels/@me"><img src="discordlogo.png" alt="Discord"></a>
-            <a href="https://wwf.panda.org/discover/knowledge_hub/endangered_species/giant_panda/"><img src="newpanda.png" alt="Panda"></a>
-        </div>
-    </div>
-    <script>
-        async function fetchCommits() {
-            const response = await fetch('https://api.github.com/repos/ADSChat/ClientADS/commits');
-            const commits = await response.json();
-            const commitList = document.getElementById('commit-list');
-
-            commits.slice(0, 10).forEach(commit => { // Display the latest 10 commits
-                const listItem = document.createElement('li');
-                listItem.textContent = commit.commit.message;
-                commitList.appendChild(listItem);
-            });
-        }
-
-        fetchCommits();
-    </script>
-</body>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>Canary Chat</title>
+		<meta content="Canary Chat" property="og:title">
+		<meta content="A new instance that hopes to revolutionise history!" property="og:description">
+		<meta content="/logo.webp" property="og:image">
+		<meta content="#4b458c" data-react-helmet="true" name="theme-color">
+		<link href="/style.css" rel="stylesheet">
+		<link href="/themes.css" rel="stylesheet" id="lightcss">
+		<style>body.no-theme,#loading{background:#16191b;}@media(prefers-color-scheme:light){body.no-theme,#loading{background:#9397bd;}}</style>
+		<link rel="manifest" href="/manifest.json">
+	</head>
+	<body class="no-theme">
+		<script src="/index.js" type="module"></script>
+		<div id="loading" class="loading">
+			<div class="centeritem">
+				<img src="/logo.svg" style="width:3in;height:3in;">
+				<h1>Canary Chat is loading</h1>
+				<h2 id="load-desc">This shouldn't take long</h2>
+				<h1 id="switchaccounts">Switch Accounts</h1>
+			</div>
+		</div>
+		<div class="flexltr" id="page">
+			<div id="servers"></div>
+			<div class="flexttb channelflex">
+				<div class="flexltr header" id="servertd">
+					<h2 id="serverName" class="ellipsis">Server Name</h2>
+				</div>
+				<div id="channels"></div>
+				<div class="flexttb">
+					<div class="flexltr" id="VoiceBox">
+						<span id="VoiceStatus"></span>
+					</div>
+					<div class="flexltr" id="userdock">
+						<div class="flexltr" id="userinfo">
+							<img id="userpfp" class="pfp">
+							<div class="flexttb userflex">
+								<p id="username">USERNAME</p>
+								<p id="status">STATUS</p>
+							</div>
+						</div>
+						<div id="user-actions">
+							<span id="settings" class="svgicon svg-settings"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="flexttb flexgrow" id="mainarea">
+				<div class="flexltr header channelnamediv">
+					<label for="maintoggle" id="maintoggleicon">
+						<span class="svgicon svg-category"></span>
+					</label>
+					<input type="checkbox" id="maintoggle">
+					<span class="flexltr">
+						<span id="channelname">Channel name</span>
+						<span id="channelTopic" class="ellipsis" hidden>Channel topic</span>
+					</span>
+					<label for="memberlisttoggle" id="memberlisttoggleicon">
+						<span class="svgicon svg-channel"></span>
+					</label>
+					<input type="checkbox" id="memberlisttoggle" checked>
+				</div>
+				<div class="flexltr flexgrow">
+					<div class="flexttb flexgrow">
+						<div id="channelw" class="flexltr">
+							<div id="loadingdiv">
+							</div>
+						</div>
+						<div id="pasteimage" class="flexltr"></div>
+						<div id="replybox" class="hideReplyBox"></div>
+						<div id="typediv">
+							<div id="realbox">
+								<div id="typebox" contentEditable="true"></div>
+							</div>
+							<div id="typing" class="hidden flexltr">
+								<p id="typingtext">typing</p>
+								<div class="flexltr loading-indicator">
+									<div class="dot"></div>
+									<div class="dot"></div>
+									<div class="dot"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="flexttb" id="sideDiv"></div>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>
