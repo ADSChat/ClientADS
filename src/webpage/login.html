@@ -1,61 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Canary Chat</title>
-		<meta content="Canary Chat" property="og:title">
-		<meta
-			content="A spacebar client that has DMs, replying and more"
-			property="og:description"
-		>
-		<meta content="/logo.webp" property="og:image">
-		<meta content="#4b458c" data-react-helmet="true" name="theme-color">
-		<link href="/style.css" rel="stylesheet">
-		<link href="/themes.css" rel="stylesheet" id="lightcss">
-		<style>body.no-theme{background:#16191b;}@media(prefers-color-scheme:light){body.no-theme{background:#9397bd;}}</style>
-	</head>
-	<body class="no-theme">
-		<div id="logindiv">
-			<h1>Login</h1>
-			<form id="form" submit="check(e)">
-				<label for="instance"><b>Instance:</b></label>
-				<p id="verify"></p>
-				<input
-					type="search"
-					list="instances"
-					placeholder="Instance URL"
-					name="instance"
-					id="instancein"
-					value=""
-					required
-				>
-
-				<label for="uname"><b>Email:</b></label>
-				<input
-					type="text"
-					placeholder="Enter email address"
-					name="uname"
-					id="uname"
-					required
-				>
-
-				<label for="psw"><b>Password:</b></label>
-				<input
-					type="password"
-					placeholder="Enter Password"
-					name="psw"
-					id="psw"
-					required
-				>
-				<p class="wrongred" id="wrong"></p>
-
-				<div id="h-captcha"></div>
-				<button type="submit">Login</button>
-			</form>
-			<a href="/register.html" id="switch">Don't have an account?</a>
-		</div>
-		<datalist id="instances"></datalist>
-		<script src="/login.js" type="module"></script>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canary Chat</title>
+    <meta content="Canary Chat" property="og:title">
+    <meta content="A spacebar client that has DMs, replying and more" property="og:description">
+    <meta content="/logo.webp" property="og:image">
+    <meta content="#4b458c" data-react-helmet="true" name="theme-color">
+    <link href="/style.css" rel="stylesheet">
+    <link href="/themes.css" rel="stylesheet" id="lightcss">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: black;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container img {
+            width: 200px;
+            margin-bottom: 20px;
+        }
+        .container h1 {
+            font-size: 36px;
+            margin: 0;
+        }
+        .form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(50, 50, 50, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .form input {
+            width: 300px;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .form button {
+            background-color: #FFDF00;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: black;
+            margin-top: 20px;
+        }
+        .form a {
+            color: #FFDF00;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .wrongred {
+            color: red;
+        }
+    </style>
+</head>
+<body class="no-theme">
+    <div class="container">
+        <img src="logo.png" alt="Canary Chat Logo">
+        <h1>Login</h1>
+        <form id="form" class="form" onsubmit="check(event)">
+            <label for="instance"><b>Instance:</b></label>
+            <p id="verify"></p>
+            <input type="search" list="instances" placeholder="Instance URL" name="instance" id="instancein" required>
+            <datalist id="instances"></datalist>
+            <label for="uname"><b>Email:</b></label>
+            <input type="text" placeholder="Enter email address" name="uname" id="uname" required>
+            <label for="psw"><b>Password:</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+            <p class="wrongred" id="wrong"></p>
+            <div id="h-captcha"></div>
+            <button type="submit">Login</button>
+            <a href="/register.html">Don't have an account? Register</a>
+        </form>
+    </div>
+    <script src="/login.js" type="module"></script>
+    <script>
+        async function check(e) {
+            e.preventDefault();
+            const instance = document.getElementById('instancein').value;
+            const username = document.getElementById('uname').value;
+            const password = document.getElementById('psw').value;
+            const response = await fetch(`${instance}/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+            const result = await response.json();
+            if (result.success) {
+                window.location.href = `${instance}/home`; // Redirect to the instance home
+            } else {
+                document.getElementById('wrong').textContent = 'Incorrect login credentials';
+            }
+        }
+    </script>
+</body>
 </html>
