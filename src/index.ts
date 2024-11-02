@@ -28,33 +28,7 @@ for(const instance of instances){
 
 app.use(compression());
 
-async function updateInstances(): Promise<void>{
-	try{
-		const response = await fetch(
-			"https://raw.githubusercontent.com/spacebarchat/spacebarchat/master/instances/instances.json"
-		);
-		const json = (await response.json()) as Instance[];
-		for(const instance of json){
-			if(instanceNames.has(instance.name)){
-				const existingInstance = instanceNames.get(instance.name);
-				if(existingInstance){
-					for(const key of Object.keys(instance)){
-						if(!existingInstance[key]){
-							existingInstance[key] = instance[key];
-						}
-					}
-				}
-			}else{
-				instances.push(instance as any);
-			}
-		}
-		observe(instances);
-	}catch(error){
-		console.error("Error updating instances:", error);
-	}
-}
-
-updateInstances();
+observe(instances);
 
 app.use("/getupdates", async (_req: Request, res: Response)=>{
 	try{
