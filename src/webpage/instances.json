@@ -10,5 +10,5 @@
             "gateway": "wss://chat.quizzity.tech/gateway"
         },
         "url": "https://chat.quizzity.tech"
-    },
+    }
 ]
