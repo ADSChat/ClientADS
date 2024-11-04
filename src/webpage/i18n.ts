@@ -1,10 +1,10 @@
 type translation={
-    [key:string]:string|{[key:string]:string}
+    [key:string]:string|translation
 };
 let res:()=>unknown=()=>{};
 class I18n{
     static lang:string;
-    static translations:{[key:string]:string}[]=[];
+    static translations:translation[]=[];
     static done=new Promise<void>((res2,_reject)=>{
         res=res2;
     });
@@ -12,7 +12,7 @@ class I18n{
         if(typeof json === "string"){
             json=await (await fetch(json)).json() as translation;
         }
-        const translations:{[key:string]:string}[]=[];
+        const translations:translation[]=[];
         let translation=json[lang];
         if(!translation){
             translation=json[lang[0]+lang[1]];
@@ -32,9 +32,21 @@ class I18n{
     }
     static getTranslation(msg:string,...params:string[]):string{
         let str:string|undefined;
+        const path=msg.split(".");
         for(const json of this.translations){
-            str=json[msg];
-            if(str){
+            let jsont:string|translation=json;
+            for(const thing of path){
+                if(typeof jsont !== "string" && jsont!==undefined){
+                    jsont=jsont[thing];
+
+                }else{
+                    jsont=json;
+                    break;
+                }
+            }
+
+            if(typeof jsont === "string"){
+                str=jsont;
                 break;
             }
         }
@@ -46,6 +58,14 @@ class I18n{
     }
     static fillInBlanks(msg:string,params:string[]):string{
         //thanks to geotale for the regex
+        msg=msg.replace(/\$\d+/g,(match) => {
+            const number=Number(match.slice(1));
+            if(params[number-1]){
+                return params[number-1];
+            }else{
+                return match;
+            }
+        });
         msg=msg.replace(/{{(.+?)}}/g,
             (str, match:string) => {
                 const [op,strsSplit]=this.fillInBlanks(match,params).split(":");
@@ -75,22 +95,37 @@ class I18n{
                 return str;
             }
         );
-        msg=msg.replace(/\$\d+/g,(str, match:string) => {
-            const number=Number(match);
-            if(params[number-1]){
-                return params[number-1];
-            }else{
-                return str;
-            }
-        });
+
         return msg;
     }
-    private static async toTranslation(trans:string|{[key:string]:string},lang:string):Promise<{[key:string]:string}>{
+    private static async toTranslation(trans:string|translation,lang:string):Promise<translation>{
         if(typeof trans==='string'){
             return this.toTranslation((await (await fetch(trans)).json() as translation)[lang],lang);
         }else{
             return trans;
         }
     }
+    static options(){
+        return ["en","ru"]
+    }
+    static setLanguage(lang:string){
+        if(this.options().indexOf(userLocale)!==-1){
+            localStorage.setItem("lang",lang);
+            I18n.create("/translations/en.json",lang);
+        }
+    }
 }
+
+let userLocale = navigator.language.slice(0,2) || "en";
+if(I18n.options().indexOf(userLocale)===-1){
+    userLocale="en";
+}
+const storage=localStorage.getItem("lang");
+if(storage){
+    userLocale=storage;
+}else{
+    localStorage.setItem("lang",userLocale)
+}
+I18n.create("/translations/en.json",userLocale);
+
 export{I18n};

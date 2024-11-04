@@ -142,6 +142,7 @@ class PermissionToggle implements OptionsElement<number>{
 import{ OptionsElement, Buttons }from"./settings.js";
 import { Contextmenu } from "./contextmenu.js";
 import { Channel } from "./channel.js";
+import { I18n } from "./i18n.js";
 class RoleList extends Buttons{
 	permissions: [Role, Permissions][];
 	permission: Permissions;
@@ -170,7 +171,7 @@ class RoleList extends Buttons{
 			this.permission = new Permissions("0");
 		}
 		this.makeguildmenus(options);
-		for(const thing of Permissions.info){
+		for(const thing of Permissions.info()){
 			options.options.push(
 				new PermissionToggle(thing, this.permission, options)
 			);
@@ -204,26 +205,26 @@ class RoleList extends Buttons{
 		this.redoButtons();
 	}
 	makeguildmenus(option:Options){
-		option.addButtonInput("","Display settings",()=>{
+		option.addButtonInput("",I18n.getTranslation("role.displaySettings"),()=>{
 			const role=this.guild.roleids.get(this.curid as string);
 			if(!role) return;
-			const form=option.addSubForm("Display settings",()=>{},{
+			const form=option.addSubForm(I18n.getTranslation("role.displaySettings"),()=>{},{
 				fetchURL:this.info.api+"/guilds/"+this.guild.id+"/roles/"+this.curid,
 				method:"PATCH",
 				headers:this.headers,
 				traditionalSubmit:true
 			});
-			form.addTextInput("Role Name:","name",{
+			form.addTextInput(I18n.getTranslation("role.name"),"name",{
 				initText:role.name
 			});
-			form.addCheckboxInput("Hoisted:","hoist",{
+			form.addCheckboxInput(I18n.getTranslation("role.hoisted"),"hoist",{
 				initState:role.hoist
 			});
-			form.addCheckboxInput("Allow anyone to ping this role:","mentionable",{
+			form.addCheckboxInput(I18n.getTranslation("role.mentionable"),"mentionable",{
 				initState:role.mentionable
 			});
 			const color="#"+role.color.toString(16).padStart(6,"0");
-			form.addColorInput("Color","color",{
+			form.addColorInput(I18n.getTranslation("role.color"),"color",{
 				initColor:color
 			});
 			form.addPreprocessor((obj:any)=>{
@@ -236,7 +237,7 @@ class RoleList extends Buttons{
 	static guildrolemenu=this.GuildRoleMenu();
 	private static ChannelRoleMenu(){
 		const menu=new Contextmenu<RoleList,Role>("role settings");
-		menu.addbutton("Remove role",function(role){
+		menu.addbutton(()=>I18n.getTranslation("role.remove"),function(role){
 			if(!this.channel) return;
 			console.log(role);
 			fetch(this.info.api+"/channels/"+this.channel.id+"/permissions/"+role.id,{
@@ -248,8 +249,8 @@ class RoleList extends Buttons{
 	}
 	private static GuildRoleMenu(){
 		const menu=new Contextmenu<RoleList,Role>("role settings");
-		menu.addbutton("Delete Role",function(role){
-			if(!confirm("Are you sure you want to delete "+role.name+"?")) return;
+		menu.addbutton(()=>I18n.getTranslation("role.delete"),function(role){
+			if(!confirm(I18n.getTranslation("role.confirmDelete"))) return;
 			console.log(role);
 			fetch(this.info.api+"/guilds/"+this.guild.id+"/roles/"+role.id,{
 				method:"DELETE",
@@ -314,7 +315,7 @@ class RoleList extends Buttons{
 		buttonTable.classList.add("flexttb");
 
 		const roleRow=document.createElement("div");
-		roleRow.classList.add("flexltr");
+		roleRow.classList.add("flexltr","rolesheader");
 		roleRow.append("Roles");
 		const add=document.createElement("span");
 		add.classList.add("svg-plus","svgicon","addrole");
@@ -338,18 +339,21 @@ class RoleList extends Buttons{
 				console.log(found);
 				this.onchange(found.id,new Permissions("0","0"));
 			}else{
+				const div=document.createElement("div");
 				const bar=document.createElement("input");
-				bar.classList.add("fixedsearch");
-				bar.style.left=(box.left^0)+"px";
-				bar.style.top=(box.top^0)+"px";
-				document.body.append(bar);
+				div.classList.add("fixedsearch","OptionList");
+				bar.type="text";
+				div.style.left=(box.left^0)+"px";
+				div.style.top=(box.top^0)+"px";
+				div.append(bar)
+				document.body.append(div);
 				if(Contextmenu.currentmenu != ""){
 					Contextmenu.currentmenu.remove();
 				}
-				Contextmenu.currentmenu=bar;
-				Contextmenu.keepOnScreen(bar);
+				Contextmenu.currentmenu=div;
+				Contextmenu.keepOnScreen(div);
 				bar.onchange=()=>{
-					bar.remove();
+					div.remove();
 					console.log(bar.value)
 					if(bar.value==="") return;
 					fetch(this.info.api+`/guilds/${this.guild.id}/roles`,{

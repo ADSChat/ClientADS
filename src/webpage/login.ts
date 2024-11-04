@@ -1,6 +1,8 @@
 import{ Dialog }from"./dialog.js";
+import { I18n } from "./i18n.js";
 
 const mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+const iOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 function setTheme(){
 	let name = localStorage.getItem("theme");
@@ -30,6 +32,21 @@ login?: string;
 }[]
 | null;
 
+(async ()=>{
+	await I18n.done
+	const instanceField=document.getElementById("instanceField");
+	const emailField= document.getElementById("emailField");
+	const pwField= document.getElementById("pwField");
+	const loginButton=document.getElementById("loginButton");
+	const noAccount=document.getElementById("switch")
+	if(instanceField&&emailField&&pwField&&loginButton&&noAccount){
+		instanceField.textContent=I18n.getTranslation("htmlPages.instanceField");
+		emailField.textContent=I18n.getTranslation("htmlPages.emailField");
+		pwField.textContent=I18n.getTranslation("htmlPages.pwField");
+		loginButton.textContent=I18n.getTranslation("htmlPages.loginButton");
+		noAccount.textContent=I18n.getTranslation("htmlPages.noAccount");
+	}
+})()
 setTheme();
 function getBulkUsers(){
 	const json = getBulkInfo();
@@ -337,7 +354,7 @@ async function getapiurls(str: string): Promise<
 async function checkInstance(instance?: string){
 	const verify = document.getElementById("verify");
 	try{
-		verify!.textContent = "Checking Instance";
+		verify!.textContent = I18n.getTranslation("login.checking");
 		const instanceValue = instance || (instancein as HTMLInputElement).value;
 		const instanceinfo = (await getapiurls(instanceValue)) as {
 			wellknown: string;
@@ -350,7 +367,7 @@ async function checkInstance(instance?: string){
 		if(instanceinfo){
 			instanceinfo.value = instanceValue;
 			localStorage.setItem("instanceinfo", JSON.stringify(instanceinfo));
-			verify!.textContent = "Instance is all good";
+			verify!.textContent = I18n.getTranslation("login.allGood");
 			// @ts-ignore
 			if(checkInstance.alt){
 			// @ts-ignore
@@ -361,11 +378,11 @@ async function checkInstance(instance?: string){
 			verify!.textContent = "";
 			}, 3000);
 		}else{
-			verify!.textContent = "Invalid Instance, try again";
+			verify!.textContent = I18n.getTranslation("login.invalid");
 		}
 	}catch{
 		console.log("catch");
-		verify!.textContent = "Invalid Instance, try again";
+		verify!.textContent = I18n.getTranslation("login.invalid");
 	}
 }
 
@@ -373,7 +390,7 @@ if(instancein){
 	console.log(instancein);
 	instancein.addEventListener("keydown", ()=>{
 		const verify = document.getElementById("verify");
-	verify!.textContent = "Waiting to check Instance";
+	verify!.textContent = I18n.getTranslation("login.waiting");
 	if(timeout !== null && typeof timeout !== "string"){
 		clearTimeout(timeout);
 	}
@@ -441,7 +458,7 @@ async function login(username: string, password: string, captcha: string){
 						let onetimecode = "";
 						new Dialog([
 							"vdiv",
-							["title", "2FA code:"],
+							["title", I18n.getTranslation("2faCode")],
 							[
 								"textbox",
 								"",
@@ -454,7 +471,7 @@ async function login(username: string, password: string, captcha: string){
 							[
 								"button",
 								"",
-								"Submit",
+								I18n.getTranslation("submit"),
 								function(){
 									fetch(api + "/auth/mfa/totp", {
 										method: "POST",
@@ -474,9 +491,7 @@ async function login(username: string, password: string, captcha: string){
 												console.warn(res);
 												if(!res.token)return;
 												adduser({
-													serverurls: JSON.parse(
-	localStorage.getItem("instanceinfo")!
-													),
+													serverurls: JSON.parse(localStorage.getItem("instanceinfo") as string),
 													email: username,
 													token: res.token,
 												}).username = username;
@@ -602,6 +617,7 @@ export{ checkInstance };
 trimswitcher();
 export{
 	mobile,
+	iOS,
 	getBulkUsers,
 	getBulkInfo,
 	setTheme,
